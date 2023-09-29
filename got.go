@@ -97,14 +97,13 @@ func Commit() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	commit_arr := []string{"tree " + tree_oid, "author " + author, "committer " + author, "", message}
 	parent, err := read_head()
+	commit_arr := []string{"tree " + tree_oid, "parent " + parent, "author " + author, "committer " + author, "", message}
 	if err != nil {
 		log.Fatal(err)
 	}
-	if parent != "" {
-		arr = append(commit_arr[:2], commit_arr[1:]...)
-		commit_arr[1] = "parent " + parent
+	if parent == "" {
+		commit_arr = append(commit_arr[:1], commit_arr[2:]...)
 	}
 	commit_str := strings.Join(commit_arr[:], "\n")
 	commit_oid := get_sha_str(commit_str)
